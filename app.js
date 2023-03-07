@@ -7,8 +7,8 @@ mongoose.connect( 'mongodb://localhost:27017/PetProject_1_ProductWebsiteBD',{ fa
 
 app.use(express.json());
 
-app.get('/', function (req, res) {
-    res.send(req.body)
+app.use('/', function(req, res) {
+    res.send(req.body);
 });
 
 app.listen(5000, () =>{
