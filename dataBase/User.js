@@ -19,6 +19,10 @@ const userSchema = new Schema ({
         minlength: 8,
         select: false
     },
+    roles:{
+        type: String,
+        default: "user"
+    },
     discount: {
         type: Number,
         default: 0
