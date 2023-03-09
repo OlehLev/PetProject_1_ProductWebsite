@@ -3,13 +3,13 @@ const mongoose = require('mongoose');
 
 const app = express();
 
-mongoose.connect( 'mongodb://localhost:27017/PetProject_1_ProductWebsiteBD',{ family: 4 });
+mongoose.connect( 'mongodb://localhost:27017/productWebSiteBD',{ family: 4 });
 
 app.use(express.json());
 
-app.use('/', function(req, res) {
-    res.send(req.body);
-});
+const userRouter = require('./routes/user.route');
+
+app.use("/", userRouter);
 
 app.listen(5000, () =>{
     // eslint-disable-next-line no-console

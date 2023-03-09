@@ -18,7 +18,20 @@ const userSchema = new Schema ({
         trim: true,
         minlength: 8,
         select: false
+    },
+    discount: {
+        type: Number,
+        default: 0
+    },
+    ordersAmountMoney: {
+        type: Number,
+        default: 0
+    },
+    subscription: {
+        type: Boolean,
+        default: true
     }
+
 },{timestamps: true});
 
 module.exports = model('user', userSchema);
