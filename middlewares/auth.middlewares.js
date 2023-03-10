@@ -34,7 +34,7 @@ module.exports = {
             if(!tokenRespons) {
                 throw new Error("error token");
             };
-            
+
             req.user = tokenRespons.user_id;
 
             next();
