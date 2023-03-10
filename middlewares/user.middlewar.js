@@ -5,8 +5,10 @@ module.exports = {
     isUserPresent:  async (req, res, next) => {
         try{
 
-            const userUniqueEmail = await User.findOne({ email: req.body.email });
-            
+            const userUniqueEmail = await User
+                .findOne({ email: req.body.email })
+                .select('+password');
+
             req.user = userUniqueEmail;
 
             next();
