@@ -1,9 +1,14 @@
 const router = require('express').Router();
 
-const controller = require('../controllers/user.controller');
+const userController = require('../controllers/user.controller');
+const authMiddlewar = require('../middlewares/auth.middlewares');
 
-router.get("/", controller.getUsers);
-router.post("/", controller.createUser);
-router.delete("/:user_id", controller.deleteUsers);
+router.get("/", userController.getUsers);
+router.post("/", userController.createUser);
+router.delete("/", 
+    authMiddlewar.chackAccessToken,
+    authMiddlewar.deleteUserToken,
+    userController.deleteUsers
+);
 
 module.exports = router;
