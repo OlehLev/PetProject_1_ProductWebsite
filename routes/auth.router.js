@@ -1,9 +1,11 @@
 const router = require('express').Router();
 const controller = require('../controllers/auth.controller');
-const middlewar = require('../middlewares/user.middlewar');
+const authMiddlewares = require('../middlewares/auth.middlewares');
+const userMiddlewar = require('../middlewares/user.middlewar');
 
 router.post('/', 
-    middlewar.isUserPresent,
+    userMiddlewar.isUserPresent,
+    authMiddlewares.isPasswordMatche,
     controller.loginUser
 );
 router.post('/logout', controller.logout);

@@ -10,7 +10,7 @@ app.use(express.json());
 const userRouter = require('./routes/user.route');
 const authRouter = require('./routes/auth.router');
 
-app.use("/", userRouter);
+app.use("/user", userRouter);
 app.use("/auth", authRouter);
 
 app.listen(5000, () =>{
