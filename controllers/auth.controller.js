@@ -8,13 +8,13 @@ module.exports = {
             const { user } = req;
             const tokenPair = jtxService.generateTokenPair();
             const normalizatorUser = userNormalizator(user);
-            const countUserLogin = await U_auth.count({user_id: user.id});
+            const countUserLogin = await U_auth.count({user_id: user._id});
 
             if(countUserLogin > 4) {
-                throw new Error ("Limit login 4 devices");
+                throw new Error ("Limit login 5 devices");
             };
 
-            await U_auth.create({ ...tokenPair, user_id: normalizatorUser.id });
+            await U_auth.create({ ...tokenPair, user_id: normalizatorUser._id });
 
             await res.json({normalizatorUser, ...tokenPair});
         }catch (e){

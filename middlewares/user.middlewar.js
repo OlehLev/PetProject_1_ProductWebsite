@@ -7,7 +7,8 @@ module.exports = {
 
             const userUniqueEmail = await User
                 .findOne({ email: req.body.email })
-                .select('+password');
+                .select('+password')
+                .lean();
 
             req.user = userUniqueEmail;
 
