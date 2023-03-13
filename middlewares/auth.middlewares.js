@@ -1,4 +1,6 @@
 const U_auth = require("../dataBase/U_auth");
+const { ErrorHandler } = require("../errors/ErrorHandler");
+const { INVALID_TOKEN, WRONG_EMAIL_OR_PASSWORD, ENTITY_NOT_FOUND } = require("../errors/errors.list");
 const jwtService = require("../services/jwt.service");
 const { compare } = require("../services/password.service");
 
@@ -12,7 +14,7 @@ module.exports = {
 
             next();
         }catch(e) {
-            next(e);
+            throw new ErrorHandler(WRONG_EMAIL_OR_PASSWORD.message, WRONG_EMAIL_OR_PASSWORD.status);
         }
     },
 
@@ -22,7 +24,7 @@ module.exports = {
             const token = req.get("Authorization");
             
             if(!token){
-                throw new Error("error token");
+                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
             };
 
             await jwtService.verifyToken(token);
@@ -32,7 +34,7 @@ module.exports = {
                 .populate('user_id');
 
             if(!tokenRespons) {
-                throw new Error("error token");
+                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
             };
 
             req.user = tokenRespons.user_id;
@@ -48,7 +50,7 @@ module.exports = {
         try{
             const token = req.get("Authorization");
             if(!token){
-                throw new Error("error token");
+                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
             }
 
             await jwtService.verifyToken(token, "refresh");
@@ -58,7 +60,7 @@ module.exports = {
                 .populate('user_id');
 
             if(!tokenRespons) {
-                throw new Error("error token");
+                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
             };
 
             await U_auth.deleteOne({ refresh_token: token});
@@ -77,7 +79,7 @@ module.exports = {
             const token = req.get("Authorization");
 
             if(!token){
-                throw new Error("token error");
+                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
             };
 
             await jwtService.verifyToken(token);
@@ -87,7 +89,7 @@ module.exports = {
                 .populate('user_id');
 
             if(!tokenRespons) {
-                throw new Error("error token");
+                throw new ErrorHandler(INVALID_TOKEN.message, INVALID_TOKEN.status);
             };
 
             await U_auth.deleteOne({ access_token: token});
@@ -106,14 +108,14 @@ module.exports = {
             const userId = req.user._id;
 
             if(!userId){
-                throw new Error("Email is invalid");
+                throw new ErrorHandler(ENTITY_NOT_FOUND.message, ENTITY_NOT_FOUND.status);
             }
             await U_auth.deleteMany({ user_id: userId});
 
             next();
 
         }catch(e){
-            next(e);
+            throw new ErrorHandler(ENTITY_NOT_FOUND.message, ENTITY_NOT_FOUND.status);
         }
     }
 };

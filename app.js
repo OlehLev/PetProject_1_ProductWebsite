@@ -1,10 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
-require('dotenv').config();
-
 const app = express();
+require('dotenv').config();
+const { MONGO_CONNECT_URL, PORT } = require('./configs/config');
 
-mongoose.connect( 'mongodb://localhost:27017/productWebSiteBD',{ family: 4 });
+mongoose.connect(MONGO_CONNECT_URL,{ family: 4 });
 
 app.use(express.json());
 
@@ -14,7 +14,7 @@ const authRouter = require('./routes/auth.router');
 app.use("/user", userRouter);
 app.use("/auth", authRouter);
 
-app.listen(5000, () =>{
+app.listen(PORT, () =>{
     // eslint-disable-next-line no-console
     console.log(`App listen 5000 `);
 });
