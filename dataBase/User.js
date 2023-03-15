@@ -1,7 +1,12 @@
 const {Schema, model} = require ('mongoose');
 
 const userSchema = new Schema ({
-    name:{
+    first_name:{
+        type: String,
+        require: true,
+        trim: true
+    },
+    family_name: {
         type: String,
         require: true,
         trim: true
@@ -10,6 +15,13 @@ const userSchema = new Schema ({
         type: String,
         unique: true,
         require: true,
+        trim: true
+    },
+    phone_number: {
+        type: Number,
+        unique: true,
+        require: true,
+        minlength: 10,
         trim: true
     },
     password: {
@@ -34,6 +46,11 @@ const userSchema = new Schema ({
     subscription: {
         type: Boolean,
         default: true
+    },
+    delivery_address: {
+        type: String,
+        trim: true,
+        default: "undefined"
     }
 
 },{timestamps: true});
