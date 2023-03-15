@@ -1,15 +1,29 @@
 const User = require('../dataBase/User');
 const { ErrorHandler } = require('../errors/ErrorHandler');
-const { EMAIL_ALREADY_EXISTS, WRONG_EMAIL_OR_PASSWORD } = require('../errors/errors.list');
+const { 
+    EMAIL_ALREADY_EXISTS, 
+    WRONG_EMAIL_OR_PASSWORD, 
+    PHONE_NUMBER_ALREADY_EXISTS, 
+    WRONG_EMAIL_OR_PHONE_NUMBER 
+} = require('../errors/errors.list');
 
 module.exports = {
     createUserMiddleware: async (req, res, next) => {
         try{
-            const { email } = req.body;
-            const checkUserEmail = await User.find({email});
 
+            if(!req.body.email || !req.body.phone_number){
+                throw new ErrorHandler(WRONG_EMAIL_OR_PHONE_NUMBER.message, WRONG_EMAIL_OR_PHONE_NUMBER.status);
+            }
+            const { email, phone_number } = req.body;
+
+            const checkUserEmail = await User.findOne({ email });
+            const checkUserPhoneNumber = await User.findOne({ phone_number });
+            
             if (checkUserEmail) {
                 throw new ErrorHandler(EMAIL_ALREADY_EXISTS.message, EMAIL_ALREADY_EXISTS.status);
+            };
+            if (checkUserPhoneNumber) {
+                throw new ErrorHandler(PHONE_NUMBER_ALREADY_EXISTS.message, PHONE_NUMBER_ALREADY_EXISTS.status);
             };
             
             next();

@@ -4,6 +4,11 @@ module.exports = {
         status: 400
     },
 
+    WRONG_EMAIL_OR_PHONE_NUMBER: {
+        message: 'Wrong email or phone number',
+        status: 400
+    },
+
     INVALID_TOKEN: {
         message: 'Invalid token',
         status: 401
@@ -21,6 +26,21 @@ module.exports = {
 
     EMAIL_ALREADY_EXISTS: {
         message: 'Email already exists',
+        status: 409
+    },
+
+    PHONE_NUMBER_ALREADY_EXISTS: {
+        message: 'Phone number already exists',
+        status: 409
+    },
+
+    PRODUCT_NAME_ALREADY_EXISTS: {
+        message: 'Product name already exists',
+        status: 409
+    },
+
+    PRODUCT_ID_ALREADY_EXISTS: {
+        message: 'Product id already exists',
         status: 409
     },
 
