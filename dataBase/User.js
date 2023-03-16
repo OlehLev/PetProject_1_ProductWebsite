@@ -18,10 +18,9 @@ const userSchema = new Schema ({
         trim: true
     },
     phone_number: {
-        type: Number,
+        type: String,
         unique: true,
         require: true,
-        minlength: 10,
         trim: true
     },
     password: {
@@ -48,9 +47,18 @@ const userSchema = new Schema ({
         default: true
     },
     delivery_address: {
-        type: String,
-        trim: true,
-        default: "undefined"
+        city: {
+            type: String,
+            default: ""
+        },
+        deliv_company: {
+            type: String,
+            default: ""
+        },
+        delivery_address: {
+            type: String,
+            default: ""
+        }
     }
 
 },{timestamps: true});

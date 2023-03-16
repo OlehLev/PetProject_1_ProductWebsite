@@ -4,25 +4,16 @@ const { NEW_ORDER } = require('../configs/orderStatus');
 const userOrderSchema = new Schema({
     user_id: {
         type: Schema.Types.ObjectId,
-        ref: 'user',
-        default: "undefined"
-    },
-    phone_number: {
-        type: Number,
-        unique: true,
-        trim: true
-    },
-    email:{
-        type: String,
-        unique: true,
-        trim: true
+        require: true,
+        ref: 'user'
     },
     products: {
         type: Array
     },
     order_number: {
         type: Number,
-        require: true
+        require: true,
+        unique: true
     },
     order_status: {
         type: String,
@@ -31,7 +22,7 @@ const userOrderSchema = new Schema({
     payment_status: {
         type: Boolean,
         default: false,
-    },
+    }
 },{timestamps: true});
 
 module.exports = model('u_order', userOrderSchema);

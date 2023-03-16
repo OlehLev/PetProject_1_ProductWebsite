@@ -7,6 +7,10 @@ const productSchema = new Schema({
         trim: true,
         unique: true
     },
+    product_description: {
+        type: String,
+        require: true
+    },
     product_id: {
         type: String,
         require: true,
@@ -34,8 +38,18 @@ const productSchema = new Schema({
         require: true
     },
     product_characteristic: {
-        type: Object,
-        require: true
+        weight: {
+            type: Number,
+            require: true
+        },
+        taste: {
+            type: String,
+            require: true
+        },
+        product_type: {
+            type: String,
+            require: true
+        }
     },
     product_quantity: {
         type: Number,
