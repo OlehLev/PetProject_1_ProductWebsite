@@ -18,7 +18,7 @@ module.exports = {
         }
     },
 
-    chackAccessToken: async (req, res, next) => {
+    checkAccessToken: async (req, res, next) => {
         try{
             
             const token = req.get("Authorization");
@@ -46,7 +46,7 @@ module.exports = {
         }
     },
 
-    chackRefreshToken: async (req, res, next) => {
+    checkRefreshToken: async (req, res, next) => {
         try{
             const token = req.get("Authorization");
             if(!token){

@@ -7,6 +7,9 @@ const userOrderSchema = new Schema({
         require: true,
         ref: 'user'
     },
+    user_info: {
+        type: Object
+    },
     products: {
         type: Array
     },
@@ -22,6 +25,20 @@ const userOrderSchema = new Schema({
     payment_status: {
         type: Boolean,
         default: false,
+    },
+    delivery_address: {
+        city: {
+            type: String,
+            default: ""
+        },
+        d_company: {
+            type: Schema.Types.ObjectId,
+            ref: 'd_companies'
+        },
+        d_address: {
+            type: String,
+            default: ""
+        }
     }
 },{timestamps: true});
 
