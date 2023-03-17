@@ -9,7 +9,7 @@ router.post("/",
     userMiddlewar.createUserMiddleware,
     userController.createUser);
 router.delete("/", 
-    authMiddlewar.chackAccessToken,
+    authMiddlewar.checkAccessToken,
     authMiddlewar.deleteUserToken,
     userController.deleteUsers
 );

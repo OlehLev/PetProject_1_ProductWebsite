@@ -37,6 +37,10 @@ const productSchema = new Schema({
         type: Array,
         require: true
     },
+    users_id: {
+        type: Array,
+        default: []
+    },
     product_characteristic: {
         weight: {
             type: Number,

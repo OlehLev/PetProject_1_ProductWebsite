@@ -15,7 +15,7 @@ router.post('/logout',
 );
     
 router.post('/refresh', 
-    authMiddlewares.chackRefreshToken,
+    authMiddlewares.checkRefreshToken,
     authController.loginUser
 );
 
