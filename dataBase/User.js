@@ -51,11 +51,12 @@ const userSchema = new Schema ({
             type: String,
             default: ""
         },
-        deliv_company: {
-            type: String,
-            default: ""
+        d_company: {
+            type: Schema.Types.ObjectId,
+            ref: 'd_companies',
+            default: "64143832c06a6ab5681678d8"
         },
-        delivery_address: {
+        d_address: {
             type: String,
             default: ""
         }
