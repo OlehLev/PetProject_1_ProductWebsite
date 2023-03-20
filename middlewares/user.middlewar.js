@@ -51,5 +51,13 @@ module.exports = {
         }catch (e){
             next(e);
         }
-    }    
+    },
+    checkConfirmUserEmail: (req, res, next) => {
+        try{
+            res.send(req.params);
+            next();
+        }catch(e) {
+            next(e);
+        };
+    } 
 };
