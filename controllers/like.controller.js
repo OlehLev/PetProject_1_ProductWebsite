@@ -10,7 +10,8 @@ module.exports = {
                 usersLikeProduct.push(req.user._id);
                 const userLike = await Products.findOneAndUpdate(
                     {_id: req.body.product_id},
-                    {users_id: usersLikeProduct}
+                    {users_id: usersLikeProduct},
+                    {new: true}
                 );
                 res.send(userLike);
                 next();
