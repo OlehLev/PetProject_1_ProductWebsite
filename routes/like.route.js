@@ -3,7 +3,7 @@ const likeController = require('../controllers/like.controller');
 const authMiddlewares = require('../middlewares/auth.middlewares');
 
 
-router.post('/', 
+router.put('/', 
     authMiddlewares.checkAccessToken,
     likeController.createUserLike
 );

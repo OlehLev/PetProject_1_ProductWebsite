@@ -7,7 +7,12 @@ const userMiddlewar = require('../middlewares/user.middlewar');
 router.get("/", userController.getUsers);
 router.post("/", 
     userMiddlewar.createUserMiddleware,
-    userController.createUser);
+    userController.confirmUserEmail
+);
+router.post("/:confirm", 
+    userMiddlewar.checkConfirmUserEmail,
+    // userController.createUser
+);
 router.delete("/", 
     authMiddlewar.checkAccessToken,
     authMiddlewar.deleteUserToken,
