@@ -1,10 +1,10 @@
 const router = require('express').Router();
-const productController = require('../controllers/product.controller');
-const productMiddlewares = require('../middlewares/product.middlewares');
+const { productController } = require('../controllers/index');
+const { productMiddleware } = require('../middlewares/index');
 
 router.get("/", productController.getProducts);
 router.post("/", 
-    productMiddlewares.isProductPresent,
+    productMiddleware.isProductPresent,
     productController.createProduct
 );
 

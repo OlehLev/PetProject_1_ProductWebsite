@@ -52,9 +52,28 @@ module.exports = {
             next(e);
         }
     },
-    checkConfirmUserEmail: (req, res, next) => {
+    isConfirmPresent: (req, res, next) => {
         try{
-            res.send(req.params);
+            if(!req.params.confirm){
+                throw new Error();
+            };
+
+            req.confirm = req.params.confirm;
+            
+            next();
+        }catch(e) {
+            next(e);
+        };
+    },
+    checkConfirmUserEmail:  (req, res, next) => {
+        try{
+
+            if(req.user.check_confirm === false){
+                throw new Error("You need to confirm the email");
+            };
+
+            req.confirm = req.params.confirm;
+            
             next();
         }catch(e) {
             next(e);
