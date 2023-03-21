@@ -1,7 +1,7 @@
 const { hash } = require('../services/password.service');
 const User = require('../dataBase/User');
 const userUtil = require('../util/user.util');
-const mailer = require('../nodemailer');
+const mailer = require('../services/nodemailer');
 
 module.exports = {
     getUsers: async (req, res, next) => {
@@ -12,16 +12,17 @@ module.exports = {
             next(e);
         }
     },
-    confirmUserEmail: (req, res, next) => {
+    creatConfirmEmail: async (req, res, next) => {
         try{
+            const confirmEmail = await hash(req.body.email);
+            req.confirm = confirmEmail.replace(/\//mg,"");
+
             const message = {
                 to: `${req.body.email}`,
                 subject: "Confirm email", // Subject line
-                text: "Please go ahead http://localhost:5000/user/:test_work_confirm", // plain text body
-                // html: "<b>Hello world?</b>", // html body
+                html: `<b>Please go ahead http://localhost:5000/auth/confirm/${req.confirm}</b>`, // html body
             };
             mailer(message);
-            res.send('');
             next();
         } catch(e) {
             next(e);
@@ -30,12 +31,28 @@ module.exports = {
     createUser: async (req, res, next) => {
         try{
             const hashedPassword = await hash(req.body.password);
-            
-            await User.create({...req.body, password: hashedPassword});
+
+            await User.create({...req.body, password: hashedPassword, confirm_url: req.confirm});
 
             const normalizatorUser = userUtil.userNormalizator(req.body);
             
             res.json(normalizatorUser);
+        }catch(e){
+            next(e);
+        };
+    },
+    confirmEmail: async (req, res, next) => {
+        try{
+            const checkConfirm = await User.findOneAndUpdate(
+                {confirm_url: req.confirm}, 
+                {check_confirm: true}, 
+                {new: true}
+            );
+            if(!checkConfirm){
+                throw new Error();
+            }
+            res.send(checkConfirm.check_confirm);
+            next();
         }catch(e){
             next(e);
         };
