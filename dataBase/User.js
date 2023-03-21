@@ -46,6 +46,14 @@ const userSchema = new Schema ({
         type: Boolean,
         default: true
     },
+    confirm_url: {
+        type: String,
+        require: true,
+    },
+    check_confirm: {
+        type: Boolean,
+        default: false
+    },
     delivery_address: {
         city: {
             type: String,

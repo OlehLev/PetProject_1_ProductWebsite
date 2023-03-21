@@ -1,22 +1,27 @@
 const router = require('express').Router();
-const authController = require('../controllers/auth.controller');
-const authMiddlewares = require('../middlewares/auth.middlewares');
-const userMiddlewar = require('../middlewares/user.middlewar');
+const { authController, userController } = require('../controllers/index');
+const { authMiddleware, userMiddleware } = require('../middlewares/index');
 
 router.post('/', 
-    userMiddlewar.isUserPresent,
-    authMiddlewares.isPasswordMatche,
+    userMiddleware.isUserPresent,
+    userMiddleware.checkConfirmUserEmail,
+    authMiddleware.isPasswordMatche,
     authController.loginUser
 );
 
 router.post('/logout', 
-    authMiddlewares.logoutToken,
+    authMiddleware.logoutToken,
     authController.logout
 );
     
 router.post('/refresh', 
-    authMiddlewares.checkRefreshToken,
+    authMiddleware.checkRefreshToken,
     authController.loginUser
+);
+
+router.get("/confirm/:confirm", 
+    userMiddleware.isConfirmPresent,
+    userController.confirmEmail
 );
 
 module.exports = router;

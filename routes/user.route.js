@@ -1,21 +1,19 @@
 const router = require('express').Router();
 
-const userController = require('../controllers/user.controller');
-const authMiddlewar = require('../middlewares/auth.middlewares');
-const userMiddlewar = require('../middlewares/user.middlewar');
+const { userController } = require('../controllers/index');
+const { authMiddleware, userMiddleware } = require('../middlewares/index');
 
 router.get("/", userController.getUsers);
+
 router.post("/", 
-    userMiddlewar.createUserMiddleware,
-    userController.confirmUserEmail
+    userMiddleware.createUserMiddleware,
+    userController.creatConfirmEmail,
+    userController.createUser
 );
-router.post("/:confirm", 
-    userMiddlewar.checkConfirmUserEmail,
-    // userController.createUser
-);
+
 router.delete("/", 
-    authMiddlewar.checkAccessToken,
-    authMiddlewar.deleteUserToken,
+    authMiddleware.checkAccessToken,
+    authMiddleware.deleteUserToken,
     userController.deleteUsers
 );
 

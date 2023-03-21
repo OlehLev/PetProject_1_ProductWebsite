@@ -1,14 +1,14 @@
 const router = require('express').Router();
-const likeController = require('../controllers/like.controller');
-const authMiddlewares = require('../middlewares/auth.middlewares');
+const { likeController } = require('../controllers/index');
+const { authMiddleware } = require('../middlewares/index');
 
 
 router.put('/', 
-    authMiddlewares.checkAccessToken,
+    authMiddleware.checkAccessToken,
     likeController.createUserLike
 );
 router.get('/', 
-    authMiddlewares.checkAccessToken,
+    authMiddleware.checkAccessToken,
     likeController.getUserLike
 );
 
