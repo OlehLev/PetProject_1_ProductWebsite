@@ -6,6 +6,7 @@ const { authMiddleware, userMiddleware } = require('../middlewares/index');
 router.get("/", userController.getUsers);
 
 router.post("/", 
+    userMiddleware.isUserValid,
     userMiddleware.createUserMiddleware,
     userController.creatConfirmEmail,
     userController.createUser

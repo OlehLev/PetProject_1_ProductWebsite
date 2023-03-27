@@ -6,6 +6,7 @@ const {
     PHONE_NUMBER_ALREADY_EXISTS, 
     WRONG_EMAIL_OR_PHONE_NUMBER 
 } = require('../errors/errors.list');
+const userValidator = require('../validators/user.validator');
 
 module.exports = {
     createUserMiddleware: async (req, res, next) => {
@@ -49,6 +50,20 @@ module.exports = {
             next();
 
         }catch (e){
+            next(e);
+        }
+    },
+    isUserValid: (req, res, next) => {
+        try{
+            const { error, value } = userValidator.createUserValidator.validate(req.body);
+            if(error){
+                throw new Error(error.details[0].message);
+            };
+
+            req.body = value;
+
+            next();
+        }catch(e) {
             next(e);
         }
     },
