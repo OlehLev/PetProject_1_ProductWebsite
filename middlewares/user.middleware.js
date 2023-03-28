@@ -4,7 +4,9 @@ const {
     EMAIL_ALREADY_EXISTS, 
     WRONG_EMAIL_OR_PASSWORD, 
     PHONE_NUMBER_ALREADY_EXISTS, 
-    WRONG_EMAIL_OR_PHONE_NUMBER 
+    WRONG_EMAIL_OR_PHONE_NUMBER,
+    EMAIL_IS_NOT_CONFIRMED,
+    WRONG_CONFIRM
 } = require('../errors/errors.list');
 const userValidator = require('../validators/user.validator');
 
@@ -70,7 +72,7 @@ module.exports = {
     isConfirmPresent: (req, res, next) => {
         try{
             if(!req.params.confirm){
-                throw new Error();
+                throw new ErrorHandler(WRONG_CONFIRM.message, WRONG_CONFIRM.status);
             };
 
             req.confirm = req.params.confirm;
@@ -84,7 +86,7 @@ module.exports = {
         try{
 
             if(req.user.check_confirm === false){
-                throw new Error("You need to confirm the email");
+                throw new ErrorHandler(EMAIL_IS_NOT_CONFIRMED.message, EMAIL_IS_NOT_CONFIRMED.status);
             };
 
             req.confirm = req.params.confirm;

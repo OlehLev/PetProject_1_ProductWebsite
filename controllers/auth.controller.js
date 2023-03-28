@@ -23,9 +23,9 @@ module.exports = {
             next(e);
         };
     },
-    logout: async (req, res, next) => {
+    logout: (req, res, next) => {
         try{
-            await res.json('Ok');
+            res.json('Ok');
         }catch (e){
             next(e);
         };
