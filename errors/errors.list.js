@@ -4,6 +4,11 @@ module.exports = {
         status: 400
     },
 
+    WRONG_CONFIRM: {
+        message: 'Wrong confirm',
+        status: 400
+    },
+
     WRONG_EMAIL_OR_PHONE_NUMBER: {
         message: 'Wrong email or phone number',
         status: 400
@@ -11,6 +16,11 @@ module.exports = {
 
     INVALID_TOKEN: {
         message: 'Invalid token',
+        status: 401
+    },
+
+    EMAIL_IS_NOT_CONFIRMED: {
+        message: 'Email is not confirmed',
         status: 401
     },
 
