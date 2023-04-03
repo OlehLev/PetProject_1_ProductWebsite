@@ -14,7 +14,7 @@ module.exports = {
 
             next();
         }catch(e) {
-            throw new ErrorHandler(WRONG_EMAIL_OR_PASSWORD.message, WRONG_EMAIL_OR_PASSWORD.status);
+            next(new ErrorHandler(WRONG_EMAIL_OR_PASSWORD.message, WRONG_EMAIL_OR_PASSWORD.status));
         }
     },
 
