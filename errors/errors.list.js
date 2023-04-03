@@ -13,6 +13,11 @@ module.exports = {
         message: 'Wrong email or phone number',
         status: 400
     },
+    
+    WRONG_ORDER_NUMBER: {
+        message: 'Wrong order number',
+        status: 400
+    },
 
     INVALID_TOKEN: {
         message: 'Invalid token',
