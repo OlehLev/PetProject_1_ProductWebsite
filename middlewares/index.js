@@ -3,4 +3,5 @@ module.exports = {
     deliveryMiddleware: require('./delivery.middleware'),
     productMiddleware: require('./product.middleware'),
     userMiddleware: require('./user.middleware'),
+    orderMiddleware: require('./order.middleware')
 };
