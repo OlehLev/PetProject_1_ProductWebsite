@@ -18,4 +18,9 @@ router.delete("/",
     userController.deleteUsers
 );
 
+router.put("/admin", 
+    authMiddleware.checkAccessToken,
+    userController.adminUpdateUser
+);
+
 module.exports = router;

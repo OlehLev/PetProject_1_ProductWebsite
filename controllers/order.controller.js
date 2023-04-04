@@ -1,8 +1,16 @@
 const U_order = require('../dataBase/U_order');
 const D_company = require('../dataBase/D_companies');
 const { ErrorHandler } = require('../errors/ErrorHandler');
-const { CANCELLED } = require('../configs/orderStatus');
-const { WRONG_ORDER_NUMBER } = require('../errors/errors.list');
+const orderStatus = require('../configs/orderStatus');
+
+const { 
+    WRONG_ORDER_NUMBER, 
+    ACCESS_DENIED, 
+    WRONG_SEARCH_ORDER, 
+    ENTITY_NOT_FOUND 
+} = require('../errors/errors.list');
+
+const { ADMIN, MANAGER } = require('../configs/userRoles');
 
 module.exports= {
     createUserOrder: async (req, res, next) => {
@@ -34,6 +42,40 @@ module.exports= {
             next(e);
         };
     },
+    
+    getOrders: async (req, res, next) => {
+        try{
+            if(req.user.roles !== ADMIN && req.user.roles !== MANAGER) {
+                throw new ErrorHandler(ACCESS_DENIED.message, ACCESS_DENIED.status);
+            };
+
+            const Orders = await U_order.find();
+
+            res.send(Orders);
+            next();
+        }catch(e){
+            next(e);
+        };
+    },
+
+    getOrdersById: async (req, res, next) => {
+        try{
+            if(req.user.roles !== ADMIN && req.user.roles !== MANAGER) {
+                throw new ErrorHandler(ACCESS_DENIED.message, ACCESS_DENIED.status);
+            };
+
+            const OrderId = await U_order.findOne({_id: req.params.id});
+
+            if(!OrderId) {
+                throw new ErrorHandler(ENTITY_NOT_FOUND.message, ENTITY_NOT_FOUND.status);
+            };
+
+            res.send(OrderId);
+            next();
+        }catch(e){
+            next(new ErrorHandler(ENTITY_NOT_FOUND.message, ENTITY_NOT_FOUND.status));
+        };
+    },
 
     cancelOrders: async (req, res, next) => {
         try{
@@ -46,7 +88,7 @@ module.exports= {
 
             const cancelOrder = await U_order.findOneAndUpdate(
                 {user_id: userId, order_number: userOrderNumber},
-                {order_status: CANCELLED}
+                {order_status: orderStatus.CANCELLED}
             );
 
             if(!cancelOrder){
@@ -57,7 +99,42 @@ module.exports= {
 
             next();
         }catch(e){
-            next(e);
+            next(new ErrorHandler(WRONG_ORDER_NUMBER.message, WRONG_ORDER_NUMBER.status));
+        }
+    },
+
+    updateOrder: async (req, res, next) => {
+        try{
+            if(req.user.roles !== ADMIN && req.user.roles !== MANAGER){
+                throw new ErrorHandler(ACCESS_DENIED.message, ACCESS_DENIED.status);
+            };
+
+            const userId = req.body.user_id;
+            const userOrder = req.body.order_number;
+
+            delete req.body.user_id;
+            delete req.body.order_number;
+
+            if(req.body.order_status){
+                if(!Object.values(orderStatus).includes(req.body.order_status)){
+                    throw new ErrorHandler(WRONG_SEARCH_ORDER.message, WRONG_SEARCH_ORDER.status);
+                }
+            };
+            
+            const result = await U_order.findOneAndUpdate(
+                { user_id: userId, order_number: userOrder },
+                { ...req.body },
+                { new: true }
+            );
+
+            if(!result){
+                throw new ErrorHandler(WRONG_SEARCH_ORDER.message, WRONG_SEARCH_ORDER.status);
+            };
+
+            res.send(result);
+            next();
+        }catch(e) {
+            next(new ErrorHandler(WRONG_SEARCH_ORDER.message, WRONG_SEARCH_ORDER.status));
         }
     }
 };
