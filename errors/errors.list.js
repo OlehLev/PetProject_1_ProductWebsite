@@ -19,6 +19,16 @@ module.exports = {
         status: 400
     },
 
+    WRONG_SEARCH_ORDER: {
+        message: 'Wrong search order',
+        status: 400
+    },
+
+    WRONG_ROLES_OR_USER_ID: {
+        message: 'Wrong user role or user id',
+        status: 400
+    },
+
     INVALID_TOKEN: {
         message: 'Invalid token',
         status: 401

@@ -19,4 +19,19 @@ router.put('/user',
     orderController.cancelOrders
 );
 
+router.put('/manager', 
+    authMiddleware.checkAccessToken,
+    orderController.updateOrder
+);
+
+router.get('/manager', 
+    authMiddleware.checkAccessToken,
+    orderController.getOrders
+);
+
+router.get('/manager/:id', 
+    authMiddleware.checkAccessToken,
+    orderController.getOrdersById
+);
+
 module.exports = router;
