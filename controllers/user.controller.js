@@ -2,6 +2,10 @@ const { hash } = require('../services/password.service');
 const User = require('../dataBase/User');
 const userUtil = require('../util/user.util');
 const mailer = require('../services/nodemailer');
+const { ADMIN } = require('../configs/userRoles');
+const { ErrorHandler } = require('../errors/ErrorHandler');
+const { ACCESS_DENIED, WRONG_ROLES_OR_USER_ID } = require('../errors/errors.list');
+const userRoles = require('../configs/userRoles');
 
 module.exports = {
     getUsers: async (req, res, next) => {
@@ -68,4 +72,33 @@ module.exports = {
             next(e);
         };
     },
+
+    adminUpdateUser: async (req, res, next) => {
+        try{
+            if(req.user.roles !== ADMIN) {
+                throw new ErrorHandler(ACCESS_DENIED.message, ACCESS_DENIED.status);
+            };
+
+            const userId = req.body.user_id;
+
+            if(!Object.values(userRoles).includes(req.body.roles)) {
+                throw new ErrorHandler(WRONG_ROLES_OR_USER_ID.message, WRONG_ROLES_OR_USER_ID.status);
+            };
+
+            const user_roles = req.body.roles;
+
+            const updateUserRole = await User.findOneAndUpdate(
+                { _id : userId },
+                {roles: user_roles}
+            );
+
+            if(!updateUserRole) {
+                throw new ErrorHandler(WRONG_ROLES_OR_USER_ID.message, WRONG_ROLES_OR_USER_ID.status);
+            }
+
+            res.json(`User hed new role ${user_roles}`);
+        }catch(e){
+            next(new ErrorHandler(WRONG_ROLES_OR_USER_ID.message, WRONG_ROLES_OR_USER_ID.status));
+        };
+    }
 };
