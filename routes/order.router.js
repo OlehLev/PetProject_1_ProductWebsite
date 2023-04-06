@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const { orderController } = require('../controllers/index');
-const { authMiddleware, deliveryMiddleware } = require('../middlewares/index');
+const { authMiddleware, deliveryMiddleware, userMiddleware } = require('../middlewares/index');
 
 router.get('/', 
     authMiddleware.checkAccessToken,
@@ -21,16 +21,19 @@ router.put('/user',
 
 router.put('/manager', 
     authMiddleware.checkAccessToken,
+    userMiddleware.chechUserRoleManager,
     orderController.updateOrder
 );
 
 router.get('/manager', 
     authMiddleware.checkAccessToken,
+    userMiddleware.chechUserRoleManager,
     orderController.getOrders
 );
 
 router.get('/manager/:id', 
     authMiddleware.checkAccessToken,
+    userMiddleware.chechUserRoleManager,
     orderController.getOrdersById
 );
 

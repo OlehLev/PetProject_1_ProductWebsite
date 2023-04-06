@@ -1,6 +1,7 @@
 const User = require('../dataBase/User');
 const { ErrorHandler } = require('../errors/ErrorHandler');
 const { 
+    ACCESS_DENIED,
     EMAIL_ALREADY_EXISTS, 
     WRONG_EMAIL_OR_PASSWORD, 
     PHONE_NUMBER_ALREADY_EXISTS, 
@@ -8,6 +9,7 @@ const {
     EMAIL_IS_NOT_CONFIRMED,
     WRONG_CONFIRM
 } = require('../errors/errors.list');
+const { ADMIN, MANAGER } = require('../configs/userRoles');
 const userValidator = require('../validators/user.validator');
 
 module.exports = {
@@ -55,6 +57,7 @@ module.exports = {
             next(e);
         }
     },
+    
     isUserValid: (req, res, next) => {
         try{
             const { error, value } = userValidator.createUserValidator.validate(req.body);
@@ -69,6 +72,7 @@ module.exports = {
             next(e);
         }
     },
+
     isConfirmPresent: (req, res, next) => {
         try{
             if(!req.params.confirm){
@@ -82,6 +86,7 @@ module.exports = {
             next(e);
         };
     },
+
     checkConfirmUserEmail:  (req, res, next) => {
         try{
 
@@ -95,5 +100,27 @@ module.exports = {
         }catch(e) {
             next(e);
         };
-    } 
+    },
+
+    chechUserRoleManager: (req, res, next) => {
+        try{
+            if(req.user.roles !== ADMIN && req.user.roles !== MANAGER){
+                throw new ErrorHandler(ACCESS_DENIED.message, ACCESS_DENIED.status);
+            };
+            next();
+        }catch(e){
+            next(e);
+        }
+    },
+
+    chechUserRoleAdmin: (req, res, next) => {
+        try{
+            if(req.user.roles !== ADMIN){
+                throw new ErrorHandler(ACCESS_DENIED.message, ACCESS_DENIED.status);
+            };
+            next();
+        }catch(e){
+            next(e);
+        }
+    },
 };

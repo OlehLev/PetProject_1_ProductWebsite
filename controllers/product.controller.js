@@ -50,5 +50,12 @@ module.exports = {
         }
     },
     deleteProduct: () => {},
-    updateProduct: () => {}
+    updateProduct: (req, res, next) => {
+        try{
+            res.send(req.product);
+            next();
+        }catch(e) {
+            next(e);
+        }
+    }
 };
