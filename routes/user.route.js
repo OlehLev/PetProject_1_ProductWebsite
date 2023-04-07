@@ -20,6 +20,7 @@ router.delete("/",
 
 router.put("/admin", 
     authMiddleware.checkAccessToken,
+    userMiddleware.chechUserRoleAdmin,
     userController.adminUpdateUser
 );
 

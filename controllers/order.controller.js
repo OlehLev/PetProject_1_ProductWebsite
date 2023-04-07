@@ -5,23 +5,29 @@ const orderStatus = require('../configs/orderStatus');
 
 const { 
     WRONG_ORDER_NUMBER, 
-    ACCESS_DENIED, 
     WRONG_SEARCH_ORDER, 
     ENTITY_NOT_FOUND 
 } = require('../errors/errors.list');
-
-const { ADMIN, MANAGER } = require('../configs/userRoles');
 
 module.exports= {
     createUserOrder: async (req, res, next) => {
         try{
             const deliveryCompany = await D_company.findOne({company_name: req.body.delivery.d_company});
-            const countOrder = await await U_order.find({});
-            
+            const countOrder = await U_order.find({});
+            let amountOrders = 0;
+
+            req.body.products.forEach(e => {
+                amountOrders = amountOrders + (e.price * e.count);
+            });
+
+            const discountOrder = amountOrders - req.body.order_amount;
             const order = await U_order.create({
                 user_id: req.user._id,
                 user_info: req.body.user,
                 products: req.body.products,
+                order_amount: amountOrders,
+                order_amount_discount: req.body.order_amount,
+                order_discount: discountOrder,
                 delivery_address: {...req.body.delivery, d_company: deliveryCompany._id },
                 order_number: countOrder.pop().order_number + 1,
             });
@@ -45,10 +51,6 @@ module.exports= {
     
     getOrders: async (req, res, next) => {
         try{
-            if(req.user.roles !== ADMIN && req.user.roles !== MANAGER) {
-                throw new ErrorHandler(ACCESS_DENIED.message, ACCESS_DENIED.status);
-            };
-
             const Orders = await U_order.find();
 
             res.send(Orders);
@@ -60,10 +62,6 @@ module.exports= {
 
     getOrdersById: async (req, res, next) => {
         try{
-            if(req.user.roles !== ADMIN && req.user.roles !== MANAGER) {
-                throw new ErrorHandler(ACCESS_DENIED.message, ACCESS_DENIED.status);
-            };
-
             const OrderId = await U_order.findOne({_id: req.params.id});
 
             if(!OrderId) {
@@ -73,7 +71,7 @@ module.exports= {
             res.send(OrderId);
             next();
         }catch(e){
-            next(new ErrorHandler(ENTITY_NOT_FOUND.message, ENTITY_NOT_FOUND.status));
+            next(e);
         };
     },
 
@@ -99,16 +97,12 @@ module.exports= {
 
             next();
         }catch(e){
-            next(new ErrorHandler(WRONG_ORDER_NUMBER.message, WRONG_ORDER_NUMBER.status));
+            next(e);
         }
     },
 
     updateOrder: async (req, res, next) => {
         try{
-            if(req.user.roles !== ADMIN && req.user.roles !== MANAGER){
-                throw new ErrorHandler(ACCESS_DENIED.message, ACCESS_DENIED.status);
-            };
-
             const userId = req.body.user_id;
             const userOrder = req.body.order_number;
 
@@ -127,6 +121,12 @@ module.exports= {
                 { new: true }
             );
 
+            // if(req.body.payment_status && req.body.payment_status === "true"){
+            //     const userOrders = await U_order.find({user_id: userId});
+            //     console.log(userOrders[1].products);
+            //     console.log("userOrders+++++++++++++++++++++++++++++++++++");
+            // };
+
             if(!result){
                 throw new ErrorHandler(WRONG_SEARCH_ORDER.message, WRONG_SEARCH_ORDER.status);
             };
@@ -134,7 +134,7 @@ module.exports= {
             res.send(result);
             next();
         }catch(e) {
-            next(new ErrorHandler(WRONG_SEARCH_ORDER.message, WRONG_SEARCH_ORDER.status));
+            next(e);
         }
     }
 };
