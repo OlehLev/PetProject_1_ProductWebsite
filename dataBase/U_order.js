@@ -13,6 +13,21 @@ const userOrderSchema = new Schema({
     products: {
         type: Array
     },
+    order_amount: {
+        type: Number,
+        require: true,
+        unique: true
+    },
+    order_amount_discount: {
+        type: Number,
+        require: true,
+        unique: true
+    },
+    order_discount: {
+        type: Number,
+        require: true,
+        unique: true
+    },
     order_number: {
         type: Number,
         require: true,

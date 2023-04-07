@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const { orderController } = require('../controllers/index');
-const { authMiddleware, deliveryMiddleware, userMiddleware } = require('../middlewares/index');
+const { authMiddleware, deliveryMiddleware, userMiddleware, orderMiddleware } = require('../middlewares/index');
 
 router.get('/', 
     authMiddleware.checkAccessToken,
@@ -11,6 +11,7 @@ router.get('/',
 router.post('/', 
     authMiddleware.checkAccessToken,
     deliveryMiddleware.availabilityInUserDelivery,
+    orderMiddleware.checkDataAvailability,
     orderController.createUserOrder
 );
 
