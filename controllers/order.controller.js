@@ -13,12 +13,21 @@ module.exports= {
     createUserOrder: async (req, res, next) => {
         try{
             const deliveryCompany = await D_company.findOne({company_name: req.body.delivery.d_company});
-            const countOrder = await await U_order.find({});
-            
+            const countOrder = await U_order.find({});
+            let amountOrders = 0;
+
+            req.body.products.forEach(e => {
+                amountOrders = amountOrders + (e.price * e.count);
+            });
+
+            const discountOrder = amountOrders - req.body.order_amount;
             const order = await U_order.create({
                 user_id: req.user._id,
                 user_info: req.body.user,
                 products: req.body.products,
+                order_amount: amountOrders,
+                order_amount_discount: req.body.order_amount,
+                order_discount: discountOrder,
                 delivery_address: {...req.body.delivery, d_company: deliveryCompany._id },
                 order_number: countOrder.pop().order_number + 1,
             });

@@ -29,6 +29,11 @@ module.exports = {
         status: 400
     },
 
+    NOT_ALL_DATA: {
+        message: 'Not all data is available',
+        status: 400
+    },
+
     INVALID_TOKEN: {
         message: 'Invalid token',
         status: 401
