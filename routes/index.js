@@ -3,5 +3,6 @@ module.exports = {
     authRouter: require('./auth.router'),
     productRouter: require('./product.router'),
     orderRouters: require('./order.router'),
-    likeRouter: require('./like.route')
+    likeRouter: require('./like.route'),
+    discountRouter: require('./discount.router')
 };

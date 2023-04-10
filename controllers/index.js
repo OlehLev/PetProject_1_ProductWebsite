@@ -3,5 +3,6 @@ module.exports = {
     likeController: require('./like.controller'),
     orderController: require('./order.controller'),
     productController: require('./product.controller'),
-    userController: require('./user.controller')
+    userController: require('./user.controller'),
+    discountController: require('./discount.controller'),
 };
