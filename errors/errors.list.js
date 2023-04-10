@@ -30,7 +30,7 @@ module.exports = {
     },
 
     NOT_ALL_DATA: {
-        message: 'Not all data is available',
+        message: 'Not all data is in the request',
         status: 400
     },
 
@@ -71,6 +71,11 @@ module.exports = {
 
     PRODUCT_ID_ALREADY_EXISTS: {
         message: 'Product id already exists',
+        status: 409
+    },
+    
+    DISCOUNT_NAME_ALREADY_EXISTS: {
+        message: 'Discount name already exists',
         status: 409
     },
 
