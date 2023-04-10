@@ -8,13 +8,14 @@ mongoose.connect(MONGO_CONNECT_URL,{ family: 4 });
 
 app.use(express.json());
 
-const { userRouter, authRouter, productRouter, orderRouters, likeRouter } = require('./routes/index');
+const { userRouter, authRouter, productRouter, orderRouters, likeRouter, discountRouter } = require('./routes/index');
 
 app.use("/user", userRouter);
 app.use("/auth", authRouter);
 app.use("/product", productRouter);
 app.use("/order", orderRouters);
 app.use("/like", likeRouter);
+app.use("/discount", discountRouter);
 
 app.listen(PORT, () =>{
     // eslint-disable-next-line no-console
