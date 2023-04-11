@@ -39,7 +39,7 @@ module.exports = {
             const discountId = req.params.id;
 
             if(!discountId) {
-                throw new ErrorHandler("Errror id it not present", 409);
+                throw new ErrorHandler(NOT_ALL_DATA.message, NOT_ALL_DATA.status);
             };
 
             req.discountId = discountId;

@@ -13,12 +13,18 @@ module.exports= {
     createUserOrder: async (req, res, next) => {
         try{
             const deliveryCompany = await D_company.findOne({company_name: req.body.delivery.d_company});
-            const countOrder = await U_order.find({});
+            const countOrders = await U_order.find();
             let amountOrders = 0;
 
             req.body.products.forEach(e => {
                 amountOrders = amountOrders + (e.price * e.count);
             });
+        
+            let countOrder = 1;
+
+            if(countOrders.length !== 0){
+                countOrder = countOrders.pop().order_number + 1;
+            };
 
             const discountOrder = amountOrders - req.body.order_amount;
             const order = await U_order.create({
@@ -29,7 +35,7 @@ module.exports= {
                 order_amount_discount: req.body.order_amount,
                 order_discount: discountOrder,
                 delivery_address: {...req.body.delivery, d_company: deliveryCompany._id },
-                order_number: countOrder.pop().order_number + 1,
+                order_number: countOrder,
             });
   
             res.send(order);
@@ -103,29 +109,29 @@ module.exports= {
 
     updateOrder: async (req, res, next) => {
         try{
-            const userId = req.body.user_id;
-            const userOrder = req.body.order_number;
+            const deliveryCompany = await D_company.findOne({company_name: req.body.delivery.d_company});
+            const orderId = req.params.id;
 
-            delete req.body.user_id;
-            delete req.body.order_number;
+            let amountOrders = 0;
 
-            if(req.body.order_status){
-                if(!Object.values(orderStatus).includes(req.body.order_status)){
-                    throw new ErrorHandler(WRONG_SEARCH_ORDER.message, WRONG_SEARCH_ORDER.status);
-                }
-            };
-            
+            req.body.products.forEach(e => {
+                amountOrders = amountOrders + (e.price * e.count);
+            });
+
+            const discountOrder = amountOrders - req.body.order_amount;
+           
             const result = await U_order.findOneAndUpdate(
-                { user_id: userId, order_number: userOrder },
-                { ...req.body },
+                { _id: orderId },
+                { 
+                    user_info: req.body.user,
+                    products: req.body.products,
+                    order_amount: amountOrders,
+                    order_amount_discount: req.body.order_amount,
+                    order_discount: discountOrder,
+                    delivery_address: {...req.body.delivery, d_company: deliveryCompany._id },
+                },
                 { new: true }
             );
-
-            // if(req.body.payment_status && req.body.payment_status === "true"){
-            //     const userOrders = await U_order.find({user_id: userId});
-            //     console.log(userOrders[1].products);
-            //     console.log("userOrders+++++++++++++++++++++++++++++++++++");
-            // };
 
             if(!result){
                 throw new ErrorHandler(WRONG_SEARCH_ORDER.message, WRONG_SEARCH_ORDER.status);
