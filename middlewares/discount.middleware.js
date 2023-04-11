@@ -34,4 +34,18 @@ module.exports = {
         }
     },
 
+    checkDiscountIdPresent: (req, res, next) => {
+        try{
+            const discountId = req.params.id;
+
+            if(!discountId) {
+                throw new ErrorHandler(NOT_ALL_DATA.message, NOT_ALL_DATA.status);
+            };
+
+            req.discountId = discountId;
+            next();
+        }catch(e) {
+            next(e);
+        }
+    }
 };

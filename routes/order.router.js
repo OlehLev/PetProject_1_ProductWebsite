@@ -20,10 +20,23 @@ router.put('/user',
     orderController.cancelOrders
 );
 
-router.put('/manager', 
+router.put('/manager/:id', 
     authMiddleware.checkAccessToken,
     userMiddleware.chechUserRoleManager,
+    orderMiddleware.checkDataAvailability,
     orderController.updateOrder
+);
+
+router.put('/manager/status', 
+    authMiddleware.checkAccessToken,
+    userMiddleware.chechUserRoleManager,
+    // orderController.updateOrder
+);
+
+router.put('/manager/payment', 
+    authMiddleware.checkAccessToken,
+    userMiddleware.chechUserRoleManager,
+    // orderController.updateOrder
 );
 
 router.get('/manager', 
