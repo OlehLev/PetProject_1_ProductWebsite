@@ -3,18 +3,21 @@ const { discountController } = require('../controllers/index');
 
 const router = require('express').Router();
 
-router.get('/', (req, res) =>{
-
-    res.send("true get");
-});
-router.get('/user', (req, res) =>{
-
-    res.send("true get User");
-});
-router.get('/dealer', (req, res) =>{
-
-    res.send("true get Dealer");
-});
+router.get('/', 
+    authMiddleware.checkAccessToken,
+    userMiddleware.chechUserRoleManager,    
+    discountController.getDiscount
+);
+router.get('/user', 
+    authMiddleware.checkAccessToken,
+    userMiddleware.chechUserRoleManager, 
+    discountController.getUsertDiscount
+);
+router.get('/dealer', 
+    authMiddleware.checkAccessToken,
+    userMiddleware.chechUserRoleManager, 
+    discountController.getDealerDiscount
+);
 
 router.post('/', 
     authMiddleware.checkAccessToken,
@@ -24,14 +27,19 @@ router.post('/',
     discountController.createDiscount
 );
 
-router.put('/:id', (req, res) =>{
+router.put('/:id', 
+    authMiddleware.checkAccessToken,
+    userMiddleware.chechUserRoleManager,
+    discountMiddleware.isDiscountParamsPresent,
+    discountMiddleware.checkDiscountIdPresent,
+    discountController.updateDiscount
+);
 
-    res.send("true update");
-});
-
-router.delete('/:id', (req, res) =>{
-
-    res.send("true delete");
-});
+router.delete('/:id',
+    authMiddleware.checkAccessToken,
+    userMiddleware.chechUserRoleManager,
+    discountMiddleware.checkDiscountIdPresent,
+    discountController.deleteDiscount
+);
 
 module.exports = router;
