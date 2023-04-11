@@ -34,4 +34,18 @@ module.exports = {
         }
     },
 
+    checkDiscountIdPresent: (req, res, next) => {
+        try{
+            const discountId = req.params.id;
+
+            if(!discountId) {
+                throw new ErrorHandler("Errror id it not present", 409);
+            };
+
+            req.discountId = discountId;
+            next();
+        }catch(e) {
+            next(e);
+        }
+    }
 };
