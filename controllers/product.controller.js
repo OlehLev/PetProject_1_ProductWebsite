@@ -28,7 +28,7 @@ module.exports = {
             const userDiscount = (100 - user.discount)/100;
 
             allProduct.forEach((e, i) => {
-                e._doc.user_price = e.product_price * userDiscount;
+                e._doc.user_price = Math.round(e.product_price * userDiscount);
                 allProduct[i] = e;              
             });
             

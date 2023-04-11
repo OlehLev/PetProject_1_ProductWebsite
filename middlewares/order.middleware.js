@@ -25,6 +25,10 @@ module.exports = {
                     throw new ErrorHandler(NOT_ALL_DATA.message, NOT_ALL_DATA.status);
                 }
             });
+
+            if(req.body.order_status || req.body.payment_status) {
+                throw new ErrorHandler(NOT_ALL_DATA.message, NOT_ALL_DATA.status);
+            };
             
             next();
         }catch(e) {
