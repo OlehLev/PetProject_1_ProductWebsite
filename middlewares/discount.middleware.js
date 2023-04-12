@@ -47,5 +47,25 @@ module.exports = {
         }catch(e) {
             next(e);
         }
+    },
+
+    discountCalculation: async (req, res, next) => {
+        try{
+
+            const userDiscount = await U_discount.find({ discount_name: { $regex: /user/ } });
+
+            req.discount = 0;
+
+            userDiscount.forEach(e => {
+
+                if(req.ordersAmountMoney > e.order_amounts) {
+                    req.discount = e.discount;
+                }
+            });
+
+            next();
+        }catch(e) {
+            next(e);
+        }
     }
 };

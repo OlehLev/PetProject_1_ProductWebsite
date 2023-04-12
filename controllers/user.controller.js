@@ -3,7 +3,7 @@ const User = require('../dataBase/User');
 const userUtil = require('../util/user.util');
 const mailer = require('../services/nodemailer');
 const { ErrorHandler } = require('../errors/ErrorHandler');
-const { WRONG_ROLES_OR_USER_ID } = require('../errors/errors.list');
+const { WRONG_ROLES_OR_USER_ID, WRONG_UPDATE } = require('../errors/errors.list');
 const userRoles = require('../configs/userRoles');
 
 module.exports = {
@@ -95,5 +95,27 @@ module.exports = {
         }catch(e){
             next(e);
         };
-    }
+    },
+
+    updateUserDiscount: async (req, res, next) => {
+        try{
+            const result = await User.findOneAndUpdate(
+                {_id: req.userId},
+                {
+                    ordersAmountMoney: req.ordersAmountMoney,
+                    discount: req.discount 
+                }
+            );
+
+            if(!result){
+                throw new ErrorHandler(WRONG_UPDATE.message, WRONG_UPDATE.status);
+            }
+
+            res.send(req.result);
+
+            next();
+        }catch(e){
+            next(e);
+        };
+    },
 };

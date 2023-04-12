@@ -1,4 +1,5 @@
 const U_discount = require("../dataBase/U_discount");
+const { WRONG_UPDATE } = require("../errors/errors.list");
 
 module.exports = {
     createDiscount: async (req, res, next) => {
@@ -56,6 +57,10 @@ module.exports = {
                 {...req.body},
                 {new: true}
             );
+
+            if(!upDate) {
+                throw new ErrorHandler(WRONG_UPDATE.message, WRONG_UPDATE.status);
+            };
             
             res.send(upDate);
 

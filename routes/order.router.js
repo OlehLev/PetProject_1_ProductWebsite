@@ -1,7 +1,13 @@
 const router = require('express').Router();
 
-const { orderController } = require('../controllers/index');
-const { authMiddleware, deliveryMiddleware, userMiddleware, orderMiddleware } = require('../middlewares/index');
+const { orderController, userController } = require('../controllers/index');
+const { 
+    authMiddleware, 
+    deliveryMiddleware, 
+    userMiddleware, 
+    orderMiddleware, 
+    discountMiddleware 
+} = require('../middlewares/index');
 
 router.get('/', 
     authMiddleware.checkAccessToken,
@@ -27,16 +33,23 @@ router.put('/manager/:id',
     orderController.updateOrder
 );
 
-router.put('/manager/status', 
+router.put('/manager/status/:id', 
     authMiddleware.checkAccessToken,
     userMiddleware.chechUserRoleManager,
-    // orderController.updateOrder
+    orderMiddleware.checkOrderIdPresent,
+    orderMiddleware.checkOrderStatusParams,
+    orderController.updateOrderStatus
 );
 
-router.put('/manager/payment', 
+router.put('/manager/payment/:id', 
     authMiddleware.checkAccessToken,
     userMiddleware.chechUserRoleManager,
-    // orderController.updateOrder
+    orderMiddleware.checkOrderIdPresent,
+    orderMiddleware.checkOrderPaymentParams,
+    orderController.updateOrderPaymaent,
+    orderMiddleware.getOrdersForDiscount,
+    discountMiddleware.discountCalculation,
+    userController.updateUserDiscount
 );
 
 router.get('/manager', 
