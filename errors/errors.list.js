@@ -24,6 +24,11 @@ module.exports = {
         status: 400
     },
 
+    WRONG_UPDATE: {
+        message: 'Wrong update DB',
+        status: 400
+    },
+
     WRONG_ROLES_OR_USER_ID: {
         message: 'Wrong user role or user id',
         status: 400

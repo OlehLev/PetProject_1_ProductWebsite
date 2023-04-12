@@ -6,7 +6,8 @@ const orderStatus = require('../configs/orderStatus');
 const { 
     WRONG_ORDER_NUMBER, 
     WRONG_SEARCH_ORDER, 
-    ENTITY_NOT_FOUND 
+    ENTITY_NOT_FOUND, 
+    WRONG_UPDATE
 } = require('../errors/errors.list');
 
 module.exports= {
@@ -140,6 +141,44 @@ module.exports= {
             res.send(result);
             next();
         }catch(e) {
+            next(e);
+        }
+    },
+
+    updateOrderStatus: async (req, res, next) => {
+        try{
+            const result = await U_order.findOneAndUpdate(
+                { _id : req.order_id },
+                { order_status: req.order_status },
+                {new: true}
+            );
+
+            if(!result) {
+                throw new ErrorHandler(WRONG_UPDATE.message, WRONG_UPDATE.status);
+            };
+
+            res.send(result);
+
+            next();
+        } catch(e) {
+            next(e);
+        }
+    },
+
+    updateOrderPaymaent: async (req, res, next) => {
+        try{
+            req.result = await U_order.findOneAndUpdate(
+                { _id : req.order_id },
+                { payment_status: req.payment_status },
+                {new: true}
+            );
+
+            if(!req.result) {
+                throw new ErrorHandler(WRONG_UPDATE.message, WRONG_UPDATE.status);
+            };
+
+            next();
+        } catch(e) {
             next(e);
         }
     }
